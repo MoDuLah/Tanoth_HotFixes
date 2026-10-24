@@ -1,0 +1,9 @@
+{
+  "name": "tanoth-weapon-hotfix",
+  "version": "1.2.0",
+  "private": true,
+  "description": "Tests for the Tanoth weapon rendering and audio hotfix.",
+  "scripts": {
+    "test": "node --test tests/tanoth-weapon-hotfix.test.js"
+  }
+}

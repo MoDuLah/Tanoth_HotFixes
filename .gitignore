@@ -1,0 +1,5 @@
+# Read-only Gameforge reference material; never commit or distribute.
+references/
+
+# Local test output.
+coverage/
