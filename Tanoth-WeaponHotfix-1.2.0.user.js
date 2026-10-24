@@ -7,11 +7,12 @@
 // @homepageURL  https://github.com/MoDuLah/Tanoth_HotFixes
 // @supportURL   https://github.com/MoDuLah/Tanoth_HotFixes/issues
 // @match        https://*.tanoth.gameforge.com/*
-// @downloadURL  https://modulah.github.io/tanoth-weapon-hotfix/tanoth-weapon-hotfix.user.js?v=1.2.0
-// @updateURL    https://modulah.github.io/tanoth-weapon-hotfix/tanoth-weapon-hotfix.user.js?v=1.2.0
+// @downloadURL  https://update.greasyfork.org/scripts/601867/Tanoth%20-%20Weapon%20Rendering%20Hotfix.user.js
+// @updateURL    https://update.greasyfork.org/scripts/601867/Tanoth%20-%20Weapon%20Rendering%20Hotfix.meta.js
 // @run-at       document-start
 // @grant        none
 // @sandbox      raw
+// @license      MIT
 // ==/UserScript==
 
 (() => {

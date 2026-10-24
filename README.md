@@ -14,7 +14,7 @@ The script does not download replacement audio, rewrite MP3 URLs, change generic
 
 ## Installation
 
-Install `Tanoth-WeaponHotfix-1.2.0.user.js` in a userscript manager that supports page-context execution. The script must run at `document-start` with `@sandbox raw`, as configured in its metadata.
+Install or update the script from [GreasyFork](https://greasyfork.org/en/scripts/601867-tanoth-weapon-rendering-hotfix) in a userscript manager that supports page-context execution. The script must run at `document-start` with `@sandbox raw`, as configured in its metadata.
 
 Firefox desktop is the primary target. Firefox Mobile compatibility depends on the userscript manager providing the same raw page context and early execution guarantees.
 
