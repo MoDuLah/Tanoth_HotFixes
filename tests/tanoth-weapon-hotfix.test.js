@@ -9,7 +9,7 @@ const vm = require("node:vm");
 const scriptPath = path.join(
   __dirname,
   "..",
-  "Tanoth-WeaponHotfix-1.2.0.user.js",
+  "Tanoth-WeaponHotfix-1.2.1.user.js",
 );
 const userscript = fs.readFileSync(scriptPath, "utf8");
 

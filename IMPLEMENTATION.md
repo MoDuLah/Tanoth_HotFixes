@@ -1,6 +1,6 @@
 # Implementation report
 
-The hotfix was advanced from 1.1.0 to 1.2.0 without creating a second independent userscript.
+The hotfix was advanced from 1.1.0 through 1.2.1 without creating a second independent userscript.
 
 ## Technique
 
@@ -14,7 +14,7 @@ The reference client proves that displayed images may be changed with `asset_ove
 
 ## Files
 
-- `Tanoth-WeaponHotfix-1.2.0.user.js`: integrated rendering and audio hotfix.
+- `Tanoth-WeaponHotfix-1.2.1.user.js`: integrated rendering and audio hotfix.
 - `tests/tanoth-weapon-hotfix.test.js`: isolated class-capture and runtime tests.
 - `README.md`: configuration, diagnostics, limitations, and Firefox checklist.
 - `.gitignore`: excludes the read-only reference client and common test output.

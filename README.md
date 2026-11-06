@@ -1,6 +1,6 @@
 # Tanoth Weapon Rendering & Audio Hotfix
 
-Version 1.2.0 extends the existing Firefox-oriented weapon rendering hotfix. It preserves the direction, rotation, reference-point fallback, adjustable lift, and warning behaviour from version 1.1.0 while adding narrowly scoped audio corrections.
+Version 1.2.1 extends the existing Firefox-oriented weapon rendering hotfix. It preserves the direction, rotation, reference-point fallback, adjustable lift, and warning behaviour from version 1.1.0 while adding narrowly scoped audio corrections and the page-bridge-safe fallback layout.
 
 ## What it fixes
 
@@ -74,7 +74,7 @@ No third-party packages are required.
 
 ## Manual Firefox checklist
 
-1. Install version 1.2.0 and reload Tanoth completely.
+1. Install version 1.2.1 and reload Tanoth completely.
 2. Confirm `window.TanothWeaponHotfix.status` is `active` and both patch flags are `true`.
 3. Enable audio diagnostics and start battles with Heartforge Hammer on the player.
 4. Confirm player hits select `combat_hit_mace1`, `combat_hit_mace2`, or `combat_hit_mace3`.

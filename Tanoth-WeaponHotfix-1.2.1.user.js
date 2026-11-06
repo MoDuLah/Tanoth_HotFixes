@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Tanoth - Weapon Rendering Hotfix
 // @namespace    modulah.github.io
-// @version      1.2.0
+// @version      1.2.1
 // @description  Fixes missing weapon animation metadata, T5 weapon sound families, and unsafe Tanoth audio playback.
 // @author       MoDuL
 // @homepageURL  https://github.com/MoDuLah/Tanoth_HotFixes
@@ -28,10 +28,10 @@
   // patched after class declarations finish, but before battles run.
   // No downloads, external scripts, server requests, or eval() are used.
 
-  const VERSION = "1.2.0";
+  const VERSION = "1.2.1";
   const PREFIX = "[Tanoth Weapon Hotfix]";
   const AUDIO_PREFIX = "[Tanoth Hotfix][Audio]";
-  const PATCH_MARKER = "__tanothWeaponHotfix120";
+  const PATCH_MARKER = "__tanothWeaponHotfix121";
   const CLASS_NAMES = Object.freeze([
     "openfl.geom.Point",
     "openfl.media.SoundTransform",
