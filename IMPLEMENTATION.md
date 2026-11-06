@@ -8,7 +8,7 @@ The existing Lime startup interception remains in place. Its temporary class-reg
 
 `SoundController.getWeaponSoundPrefix()` is wrapped so that the original result is calculated first and only an exact type-and-ID override can replace it. `getWeaponSoundId()` remains the source of numbered variations. `SoundController.play()` now performs the same volume-aware playback using a captured `SoundTransform`, but only after validating the requested ID, `libPaths` entry, and resolved asset.
 
-BattleGround's player/opponent load and attack methods are wrapped only to carry diagnostic actor context. Their original control flow, including the separate `combat_block` branch, is unchanged. All wrappers carry stable markers, and repeat installation reuses them.
+BattleGround's player/opponent load and attack methods are wrapped only to carry diagnostic actor context. Their original control flow, including the separate `combat_block` branch, is unchanged. Weapon initialisers normally retain the original game implementation; only a missing-reference-point fallback uses a direct equivalent of the generated Haxe layout, preventing page-bridge property visibility from turning the repaired point back into `undefined`. All wrappers carry stable markers, and repeat installation reuses them.
 
 The reference client proves that displayed images may be changed with `asset_override`, so image ID alone is not a safe equipment key. Separate workspace observations identify Heartforge Hammer as an actual unique item with `itemcode 186`; that evidence supports the exact `item_metall` equipment mapping.
 

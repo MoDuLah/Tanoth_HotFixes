@@ -4,7 +4,7 @@ Version 1.2.0 extends the existing Firefox-oriented weapon rendering hotfix. It 
 
 ## What it fixes
 
-- Missing or invalid weapon direction, angle, and reference-point metadata no longer crashes the battle renderer.
+- Missing or invalid weapon direction, angle, and reference-point metadata no longer crashes the battle renderer. When a userscript page bridge refuses to expose an assigned fallback through Haxe `Reflect.getProperty()`, the hotfix now applies the same generated weapon layout directly instead of allowing the game to read `.x` from `undefined`.
 - `unique186` (Heartforge Hammer) now uses Tanoth's existing `combat_hit_mace` family instead of the generic hit family.
 - Dragging Heartforge Hammer uses the existing `item_metall` equipment sound.
 - Empty, unregistered, or unresolved sound assets are skipped before Tanoth can call `.play()` on `null`.

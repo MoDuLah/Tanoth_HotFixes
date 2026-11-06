@@ -159,7 +159,7 @@
       const active = current[side];
       if (active && active.weapon && active.weapon.__tanothFallbackRP) {
         const { weapon } = active;
-        const point = weapon.rp;
+        const point = weapon.__tanothFallbackPoint || weapon.rp;
         if (point && Number.isFinite(point.y)) point.y += delta;
         const container =
           typeof weapon.getChildByName === "function"
@@ -318,7 +318,7 @@
 
   function repairWeapon(battlefield, side, Point) {
     const weapon = battlefield[side + "_weapon"];
-    if (!weapon) return;
+    if (!weapon) return null;
 
     if (weapon.dir !== "left" && weapon.dir !== "right") {
       logWarning(
@@ -363,13 +363,53 @@
           liftedByPixels: lift[side],
         },
       );
-      weapon.rp = new Point(x, y);
+      const fallbackPoint = new Point(x, y);
+      weapon.rp = fallbackPoint;
       weapon.__tanothFallbackRP = true;
+      weapon.__tanothFallbackPoint = fallbackPoint;
       current[side] = { weapon };
+      return { weapon, point: weapon.__tanothFallbackPoint, fallback: true };
     } else if (!weapon.__tanothFallbackRP) {
       // Do not modify Gameforge's correct positioning metadata.
       current[side] = null;
     }
+    return { weapon, point, fallback: false };
+  }
+
+  function applyFallbackWeaponLayout(battlefield, side, point) {
+    const weapon = battlefield[side + "_weapon"];
+    const picContainer = weapon?.getChildByName?.("pic_container");
+    if (
+      !weapon ||
+      !picContainer ||
+      !point ||
+      !Number.isFinite(point.x) ||
+      !Number.isFinite(point.y)
+    ) {
+      return false;
+    }
+
+    const angle = Number(weapon.deg) * Math.PI / 180;
+    const distance = 25;
+    const tangent = Math.tan(angle);
+    const offsetX = Math.sqrt(distance ** 2 / (1 + tangent ** 2)) | 0;
+    const offsetY = Math.sqrt(distance ** 2 * tangent ** 2) | 0;
+    const facesLeft = weapon.dir === "left";
+
+    // Mirror the generated Haxe layout exactly, but use the known fallback
+    // point directly. Some userscript page bridges accept the assignment to
+    // weapon.rp yet Reflect.getProperty() still returns undefined afterwards.
+    weapon.set_scaleX(side === "pl" ? (facesLeft ? -1 : 1) : (facesLeft ? 1 : -1));
+    weapon.set_scaleY(1);
+    picContainer.set_x(-point.x + (facesLeft ? -offsetX : offsetX));
+    picContainer.set_y(
+      -point.y + (side === "pl" || !facesLeft ? offsetY : -offsetY),
+    );
+    weapon.set_rotation(Number(weapon.deg));
+    weapon.set_x(side === "pl" ? 200 : 600);
+    weapon.set_y(430);
+    weapon.set_visible(false);
+    return true;
   }
 
   function isWrapped(fn, label) {
@@ -421,7 +461,13 @@
           `animation:${methodName}`,
           (original) =>
             function (...args) {
-              repairWeapon(this, side, Point);
+              const repair = repairWeapon(this, side, Point);
+              if (
+                repair?.fallback &&
+                applyFallbackWeaponLayout(this, side, repair.point)
+              ) {
+                return undefined;
+              }
               return original.apply(this, args);
             },
         )

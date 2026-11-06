@@ -13,11 +13,12 @@ const scriptPath = path.join(
 );
 const userscript = fs.readFileSync(scriptPath, "utf8");
 
-function createHarness() {
+function createHarness({ strictWeaponInit = false } = {}) {
   const storage = new Map();
   const logs = { info: [], warn: [], error: [] };
   const sandbox = {
     __random: 0,
+    __strictWeaponInit: strictWeaponInit,
     console: {
       info: (...args) => logs.info.push(args),
       warn: (...args) => logs.warn.push(args),
@@ -141,9 +142,11 @@ function createHarness() {
 
           BattleGround.prototype.initPlWeapon = function () {
             this.plInitCount += 1;
+            if (window.__strictWeaponInit) this.pl_weapon.rp.x;
           };
           BattleGround.prototype.initOpWeapon = function () {
             this.opInitCount += 1;
+            if (window.__strictWeaponInit) this.op_weapon.rp.x;
           };
           BattleGround.prototype.on_pl_weapon_complete = function (event) {
             this.sound_pl_weapon = controller.getWeaponSoundPrefix(event.id, event.type);
@@ -342,6 +345,65 @@ test("existing animation fallback still repairs direction, angle, and reference 
     { x: 18, y: 150 },
   );
   assert.equal(battle.plInitCount, 1);
+});
+
+test("missing reference metadata bypasses the page-bridge rp read and lays out the weapon safely", () => {
+  const harness = createHarness({ strictWeaponInit: true });
+  const battle = new harness.classes.BattleGround();
+  const picture = {
+    set_x(value) { this.x = value; },
+    set_y(value) { this.y = value; },
+  };
+  const weapon = {
+    dir: null,
+    deg: Number.NaN,
+    getChildByName(name) { return name === "pic_container" ? picture : null; },
+    set_scaleX(value) { this.scaleX = value; },
+    set_scaleY(value) { this.scaleY = value; },
+    set_rotation(value) { this.rotation = value; },
+    set_x(value) { this.x = value; },
+    set_y(value) { this.y = value; },
+    set_visible(value) { this.visible = value; },
+  };
+  Object.defineProperty(weapon, "rp", {
+    configurable: true,
+    get() { return undefined; },
+    set(value) { this.assignedReferencePoint = value; },
+  });
+  battle.pl_weapon = weapon;
+
+  assert.doesNotThrow(() => battle.initPlWeapon());
+  assert.equal(battle.plInitCount, 0);
+  assert.equal(weapon.dir, "right");
+  assert.equal(weapon.deg, 30);
+  assert.deepEqual(
+    { x: weapon.assignedReferencePoint.x, y: weapon.assignedReferencePoint.y },
+    { x: 18, y: 150 },
+  );
+  assert.deepEqual(
+    {
+      scaleX: weapon.scaleX,
+      scaleY: weapon.scaleY,
+      rotation: weapon.rotation,
+      x: weapon.x,
+      y: weapon.y,
+      visible: weapon.visible,
+      pictureX: picture.x,
+      pictureY: picture.y,
+    },
+    {
+      scaleX: 1,
+      scaleY: 1,
+      rotation: 30,
+      x: 200,
+      y: 430,
+      visible: false,
+      pictureX: 3,
+      pictureY: -136,
+    },
+  );
+  harness.api.setLift(40, "player");
+  assert.equal(weapon.assignedReferencePoint.y, 158);
 });
 
 test("reference client still matches the narrow Haxe patch contract", (t) => {
